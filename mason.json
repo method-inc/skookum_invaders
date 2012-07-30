@@ -1,0 +1,18 @@
+{
+
+  "style.css": {
+    "type": "stylus",
+    "sourceRoot": ".",
+    "sourcePaths": ["/styl/style.styl"],
+    "destRoot": "public",
+    "destPath": "styl/compiled/style.css"
+  },
+
+  "index.html": {
+    "type": "jade",
+    "sourceRoot": "./jade/",
+    "sourcePaths": ["index.jade"],
+    "destRoot": "",
+    "destPath": "public/index.html"
+  }
+}

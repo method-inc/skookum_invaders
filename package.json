@@ -1,0 +1,22 @@
+{
+  "author": "Skookum Digital Works",
+  "name": "pps-api-docs-site",
+  "description": "PPS API Public Documentation Site",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Skookum/pps-api-docs-site/",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Skookum/pps-api-docs-site.git"
+  },
+  "engines": {},
+  "dependencies": {},
+  "devDependencies": {
+    "mason": "0.0.13",
+    "serve": "latest"
+  },
+  "analyze": false,
+  "scripts": {
+    "start": "./node_modules/.bin/serve ./public --no-logs & ./node_modules/.bin/mason watch -j",
+    "build": "./node_modules/.bin/mason build"
+  }
+}
