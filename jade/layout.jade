@@ -4,14 +4,20 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
     title 
       block title
-        | Dino Pirates!!
+        | Skookum Invaders!!
     meta(name='viewport', content='width=device-width')
     != mason('style.css')
   body
-    section#main(role='application')
-      block content
+    #container
+        block content
 
     //- All Javascript
-    script(src='/js/libs/jquery-1.7.2.min.js')
-    script(src='/js/libs/excanvas.js')
-    block scripts
+    //- script(src='/js/excanvas.js')
+    script(src='/js/easeljs-0.4.2.min.js')
+    script(src='/js/underscore.js')
+    script(src='/js/utils.js')
+    script(src='/js/scoreboard.js')
+    script(src='/js/skookum.js')
+    script(src='/js/bullet.js')
+    script(src='/js/red_enemy.js')
+    script(src='/js/main.js')
