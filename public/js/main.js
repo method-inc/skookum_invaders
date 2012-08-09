@@ -211,7 +211,7 @@ function tick() {
   game.scoreboard = new Scoreboard();
   game.sounds = {
     launch: new Audio("sounds/launch.wav"),
-    shoot: new Audio("sounds/shoot.wav"),
+    shoot: new Audio("sounds/shoot2.wav"),
     hit: new Audio("sounds/hit.wav"),
     explosion: new Audio("sounds/explosion.wav")
   };

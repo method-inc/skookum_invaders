@@ -4,7 +4,7 @@ function RedEnemy(x, y) {
   this.id = randomString();
   this.name = 'red_enemy';
   this.width = 230;
-  this.height = 220;
+  this.height = 230;
   this.scale = 0.25;
   this.vY = 50;
   this.vX = 2;
@@ -35,7 +35,6 @@ function RedEnemy(x, y) {
   this.animation.onAnimationEnd = function(instance, anim) {
     if (anim == "dead") {
       this.gotoAndStop(9);
-      return game.deadEnemies.push(self);
     }
   };
 
@@ -51,6 +50,7 @@ RedEnemy.prototype = {
   tick: function() {
     
     if (this.dead) {
+      if (this.animation.currentFrame == 9) game.deadEnemies.push(this);
       return;
     }
 

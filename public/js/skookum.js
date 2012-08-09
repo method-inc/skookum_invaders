@@ -1,9 +1,9 @@
 function Skookum() {
   this.id = randomString();
   this.name = 'logo';
-  this.width = 316;
-  this.height = 280;
-  this.scale = 0.25;
+  this.width = 270;
+  this.height = 220;
+  this.scale = 0.3;
   this.x = Math.floor(game.canvas.width / 2);
   this.y = game.canvas.height - this.height * this.scale - 50;
   this.vX = 10;
@@ -11,11 +11,17 @@ function Skookum() {
   this.x_direction = 0;
   this.y_direction = 0;
   this.startupSequence = true;
+  this.shield = true;
+  this.hitTimeout = 0;
+  this.timeoutLength = 120;
 
   this.sprites = new SpriteSheet({
     images:['img/'+this.name+'.png'],
-    frames: {width:this.width, height:this.height, count:4, regX:this.width/2, regY:this.height/2},
-    animations: {shoot:[0,3, "shoot", 2]}
+    frames: {width:this.width, height:this.height, count:8, regX:this.width/2, regY:this.height/2},
+    animations: {
+      shoot_without_shield:[0,3, "shoot_without_shield", 5],
+      shoot_with_shield:[4,7, "shoot_with_shield", 5]
+    }
   });
 
   this.animation = new BitmapAnimation(this.sprites);
@@ -29,7 +35,7 @@ function Skookum() {
 
   this.animation.scaleX = this.animation.scaleY = 2;
 
-  this.animation.currentFrame = 0;
+  this.animation.currentFrame = 4;
   game.stage.addChild(this.animation);
 }
 
@@ -59,16 +65,34 @@ Skookum.prototype = {
     }
 
     var self = this;
-    _.each(game.enemies, function(e) {
-      if (self.checkEnemyHit(e)) return self.die();
-    });
+    if (this.hitTimeout === 0) {
+      _.each(game.enemies, function(e) {
+        if (self.checkEnemyHit(e)) {
+          e.takeDamage();
+          return self.takeDamage(e);
+        }
+      });  
+    }
+    else {
+      this.hitTimeout++;
+      this.animation.alpha = Math.random();
+    }
+
+    if (this.hitTimeout >= this.timeoutLength) {
+      this.hitTimeout = 0;
+      this.animation.alpha = 1;
+    }
+    
 
     return this;
   },
 
   shoot: function() {
-    this.animation.gotoAndPlay('shoot');
+    if (this.shield) this.animation.gotoAndPlay('shoot_with_shield');
+    else this.animation.gotoAndPlay('shoot_without_shield');
     game.bullets.push(new Bullet(this.animation.x, this.animation.y));
+    game.sounds.shoot.pause();
+    game.sounds.shoot.currentTime = 0;
     game.sounds.shoot.play();
   },
 
@@ -87,6 +111,19 @@ Skookum.prototype = {
     }
 
     return false;
+  },
+
+  takeDamage: function() {
+
+    this.hitTimeout = 1;
+
+    if (this.shield) {
+      this.shield = false;
+      this.animation.gotoAndStop(0);
+    }
+    else {
+      this.die();
+    }
   },
 
   die: function() {

@@ -1,16 +1,16 @@
 function Bullet(x, y) {
   this.id = randomString();
   this.name = 'bullet';
-  this.width = 100;
+  this.width = 50;
   this.height = 100;
-  this.scale = 0.1;
-  this.vY = 10;
+  this.scale = 0.25;
+  this.vY = 15;
   this.dead = false;
 
   this.sprites = new SpriteSheet({
     images:['img/'+this.name+'.png'],
-    frames: {width:this.width, height:this.height, count:1, regX:this.width/2, regY:this.height/2},
-    animations: {shoot:[0,0, "shoot", 1]}
+    frames: {width:this.width, height:this.height, count:2, regX:this.width/2, regY:this.height/2},
+    animations: {shoot:[0,1, "shoot", 8]}
   });
 
   this.animation = new BitmapAnimation(this.sprites);
