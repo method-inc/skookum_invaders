@@ -3,6 +3,7 @@ function RedEnemy(x, y) {
 
   this.id = randomString();
   this.name = 'red_enemy';
+  this.enemy = true;
   this.width = 230;
   this.height = 230;
   this.scale = 0.25;
@@ -45,46 +46,49 @@ function RedEnemy(x, y) {
   return this;
 }
 
-RedEnemy.prototype = {
+// inherit actor methods
+RedEnemy.prototype = new Actor();
 
-  tick: function() {
+// tick method
+RedEnemy.prototype.tick = function() {
     
-    if (this.dead) {
-      if (this.animation.currentFrame == 9) game.deadEnemies.push(this);
-      return;
-    }
-
-    this.animation.x += this.vX * this.direction * this.health;
-    if (this.animation.x > game.canvas.width - this.movement_padding || this.animation.x < this.movement_padding) {
-      this.direction *= -1;
-      this.animation.y += this.vY;
-    }
-
-    return this;
-  },
-
-  takeDamage: function() {
-    this.health--;
-    if(this.health === 2) this.animation.gotoAndPlay('damaged');
-    if(this.health === 1) this.animation.gotoAndPlay('dying');
-    game.sounds.hit.pause();
-    game.sounds.hit.currentTime = 0;
-    game.sounds.hit.play();
-    if(this.health < 1) {
-      this.die();
-      game.score += 25;
-    }
-    else {
-      game.score += 10;
-    }
-  },
-
-  die: function() {
-    game.sounds.explosion.pause();
-    game.sounds.explosion.currentTime = 0;
-    game.sounds.explosion.play();
-    this.animation.gotoAndPlay('dead');
-    this.dead = true;
+  if (this.dead) {
+    if (this.animation.currentFrame == 9) game.deadItems.push(this);
+    return;
   }
 
+  // this.animation.x += this.vX * this.direction * this.health;
+  if (this.animation.x > game.canvas.width - this.movement_padding || this.animation.x < this.movement_padding) {
+    this.direction *= -1;
+    this.animation.y += this.vY;
+  }
+
+  return this;
+};
+
+// take damage when hit
+RedEnemy.prototype.takeDamage = function() {
+  this.health--;
+  if(this.health === 2) this.animation.gotoAndPlay('damaged');
+  if(this.health === 1) this.animation.gotoAndPlay('dying');
+  game.playSound('hit');
+  if(this.health < 1) {
+    this.die();
+    game.score += 25;
+  }
+  else {
+    game.score += 10;
+  }
+};
+
+// shoot method
+RedEnemy.prototype.shoot = function() {
+
+};
+
+// die method
+RedEnemy.prototype.die = function() {
+  game.playSound('explosion');
+  this.animation.gotoAndPlay('dead');
+  this.dead = true;
 };

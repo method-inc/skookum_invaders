@@ -6,7 +6,14 @@ var KEYCODE_RIGHT = 39;
 var KEYCODE_W     = 87;
 var KEYCODE_A     = 65;
 var KEYCODE_D     = 68;
+var KEYCODE_P     = 80;
 
+var config = {
+  fps: 60,
+  startLevel: 1,
+  rewardInterval: 5000, 
+  rewardLevel: 1
+};
 
 window.game = {
   handleKeyDown: function(e) {
@@ -27,6 +34,10 @@ window.game = {
           break;
       case KEYCODE_SPACE:
           this.skookum.shoot();
+          break;
+      case KEYCODE_P:
+          game.paused = !game.paused;
+          break;
     }
   },
 
@@ -48,17 +59,19 @@ window.game = {
   },
 
   spawnEnemy: function(x, y) {
-    game.enemies.push(new RedEnemy(x || 50, y || 50));
+    game.items.push(new RedEnemy(x || 350, y || 150));
   },
 
   buildNewEnemyGroup: function(num) {
     var spacing = 100;
 
-    _.each(_.range(num || 2), function(n) {
-      for(var i = 0; i < 8; i++) {
-        game.spawnEnemy(100 * i + 150, (n*spacing)+spacing);
-      }
-    });
+    game.spawnEnemy();
+
+    //_.each(_.range(num || 2), function(n) {
+    //  for(var i = 0; i < 8; i++) {
+    //    game.spawnEnemy(100 * i + 150, (n*spacing)+spacing);
+    //  }
+    //});
   },
 
   drawGrid: function() {
@@ -83,6 +96,8 @@ window.game = {
   },
 
   drawStars: function() {
+    game.starField = new Container();
+    game.starField.name = 'starfield';
     for(var i = 0; i < 300; i++) {
       var x = Math.random()*game.canvas.width,
           y = Math.random()*game.canvas.height,
@@ -93,83 +108,60 @@ window.game = {
       star.graphics.drawCircle(0,0,r);
       star.x = x;
       star.y = y;
-      game.stage.addChild(star);
+      game.starField.addChild(star);
     }
+    game.stage.addChild(game.starField);
+  },
+
+  playSound: function(sound) {
+    game.sounds[sound].pause();
+    game.sounds[sound].currentTime = 0;
+    game.sounds[sound].play();
   }
 };
 
 
 function tick() {
   
-  if (game.over) return;
+  if (game.over || game.paused) return;
 
-  // update enemies
-  for(var i = 0, num = game.enemies.length; i < num; i++) {
-    game.enemies[i].tick();
+  // update items
+  for(var i = 0, num = game.items.length; i < num; i++) {
+    game.items[i].tick();
   }
 
-  // update bullets
-  for(i = 0, num = game.bullets.length; i < num; i++) {
-    game.bullets[i].tick();
-  }
-
-  // update player and bullets
+  // update player
   game.skookum.tick();
 
-
-  var lastOne, index;
-
-  // remove all dead enemies
-  while(game.deadEnemies.length > 0) {
-    lastOne = game.deadEnemies[game.deadEnemies.length - 1];
-    game.deadEnemies.splice(0, 1);
-    game.enemies.splice(findIndexById(game.enemies, lastOne.id), 1);
-  }
-
-  // remove all dead bullets
-  while(game.deadBullets.length > 0) {
-    lastOne = game.deadBullets[game.deadBullets.length - 1];
-    game.deadBullets.splice(0, 1);
-    game.bullets.splice(findIndexById(game.bullets, lastOne.id), 1);
+  // remove all dead items
+  while(game.deadItems.length > 0) {
+    var lastOne = game.deadItems[game.deadItems.length - 1];
+    game.deadItems.splice(0, 1);
+    game.items.splice(findIndexById(game.items, lastOne.id), 1);
   }
 
   // clean up stragglers on stage
   _.each(game.stage.children, function(child) {
     
+    if (child.name == 'skookum' || child.name == 'starfield') return;
+
     var found;
 
-    if (child.name == "bullet") {
-      // if all bullets should be gone, just remove
-      if(game.bullets.length === 0) return game.stage.removeChild(child);
-      
-      // look through bullets still in game and see if this bullet is there
-      found = _.find(game.bullets, function(b) {
-        return b.animation.id === child.id;
-      });
-
-      // didn't find it, remove from stage
-      if (!found) game.stage.removeChild(child);
-    } 
+    // if all items should be gone, just remove
+    if(game.items.length === 0) return game.stage.removeChild(child);
     
-    if (child.name == "red_enemy") {
-      // if all enemies should be gone, just remove
-      if (game.enemies.length === 0) return game.stage.removeChild(child);
+    // look through items still in game and see if this item is there
+    found = _.find(game.items, function(b) {
+      return b.animation.id === child.id;
+    });
 
-      // look through enemies still in game and see if this enemy is there
-      found = _.find(game.enemies, function(b) {
-        return b.animation.id === child.id;
-      });
-
-      // didn't find it, remove from stage
-      if (!found) {
-        game.stage.removeChild(child);
-      }
-    }
-      
+    // didn't find it, remove from stage
+    if (!found) game.stage.removeChild(child);
 
   });
 
-  if (game.enemies.length < 1 && game.bullets.length < 1) {
+  // all items and items off of screen, start next level
+  if (game.items.length < 1) {
     game.score += 1000; // clear level point bonus
     game.level++;
     game.buildNewEnemyGroup(game.numEnemyGroups++);
@@ -177,6 +169,13 @@ function tick() {
 
   // update scoreboard
   game.scoreboard.tick();
+
+  // reward for points
+  if (game.score > game.rewardInterval * game.rewardLevel) {
+    game.rewardLevel++;
+    game.skookum.shield = true;
+    game.skookum.animation.gotoAndStop(4);
+  }
 
   game.stage.update();
 }
@@ -198,13 +197,14 @@ function tick() {
   game.skookum = new Skookum();
 
   game.score = 0;
-  game.level = 1;
+  game.level = config.startLevel;
+  game.rewardInterval = config.rewardInterval;
+  game.rewardLevel = config.rewardLevel;
   game.numEnemyGroups = 2;
+  game.paused = false;
 
-  game.enemies = [];
-  game.deadEnemies = [];
-  game.bullets = [];
-  game.deadBullets = [];
+  game.items = [];
+  game.deadItems = [];
 
   game.buildNewEnemyGroup(game.numEnemyGroups++);
 
@@ -216,7 +216,7 @@ function tick() {
     explosion: new Audio("sounds/explosion.wav")
   };
 
-  Ticker.setFPS(60);
+  Ticker.setFPS(config.fps);
   Ticker.addListener(tick);
 
   document.onkeydown = function (e) {

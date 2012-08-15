@@ -28,53 +28,35 @@ function Bullet(x, y) {
   return this;
 }
 
-Bullet.prototype = {
+// inherit actor methods
+Bullet.prototype = new Actor();
 
-  tick: function() {
+// tick function
+Bullet.prototype.tick = function() {
     
-    if (this.dead) {
-      return game.deadBullets.push(this);
-    }
-
-    this.animation.y -= this.vY;
-
-    if (this.animation.y < -this.height) {
-      this.die();
-    }
-
-    else {
-      for(var i = 0, num = game.enemies.length; i < num; i++) {
-        if (this.checkHit(game.enemies[i])) {
-          game.enemies[i].takeDamage();
-          this.die();
-        }
-      }
-    }
-
-    return this;
-  },
-
-  die: function() {
-    this.dead = true;
-  },
-
-  checkHit: function(enemy) {
-    if (enemy.dead) return false;
-
-    var xHitZone = [enemy.animation.x - (enemy.width*enemy.scale)/2, enemy.animation.x + (enemy.width*enemy.scale)/2];
-    var yHitZone = [enemy.animation.y - (enemy.height*enemy.scale)/2, enemy.animation.y + (enemy.height*enemy.scale)/2];
-    // console.log(xHitZone, yHitZone, this.animation.x, this.animation.y, this.animation.x > xHitZone[0] && this.animation.x < xHitZone[1] && this.animation.y > yHitZone[0] && this.animation.y < yHitZone[1]);
-
-    if (this.animation.x > xHitZone[0] && 
-        this.animation.x < xHitZone[1] &&
-        this.animation.y > yHitZone[0] &&
-        this.animation.y < yHitZone[1]
-        ) {
-      
-      return true;
-    }
-
-    return false;
+  if (this.dead) {
+    return game.deadItems.push(this);
   }
 
+  this.animation.y -= this.vY;
+
+  if (this.animation.y < -this.height) {
+    this.die();
+  }
+
+  else {
+    for(var i = 0, num = game.items.length; i < num; i++) {
+      if (game.items[i].enemy && this.checkHit(game.items[i])) {
+        game.items[i].takeDamage();
+        this.die();
+      }
+    }
+  }
+
+  return this;
+};
+
+// die function
+Bullet.prototype.die = function() {
+  this.dead = true;
 };

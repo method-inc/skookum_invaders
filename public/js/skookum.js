@@ -1,6 +1,6 @@
 function Skookum() {
   this.id = randomString();
-  this.name = 'logo';
+  this.name = 'skookum';
   this.width = 270;
   this.height = 220;
   this.scale = 0.3;
@@ -90,16 +90,13 @@ Skookum.prototype = {
   shoot: function() {
     if (this.shield) this.animation.gotoAndPlay('shoot_with_shield');
     else this.animation.gotoAndPlay('shoot_without_shield');
-    game.bullets.push(new Bullet(this.animation.x, this.animation.y));
-    game.sounds.shoot.pause();
-    game.sounds.shoot.currentTime = 0;
-    game.sounds.shoot.play();
+    game.items.push(new Bullet(this.animation.x, this.animation.y));
+    game.playSound('shoot');
   },
 
   checkEnemyHit: function(enemy) {
     var xHitZone = [enemy.animation.x - (enemy.width*enemy.scale)/2, enemy.animation.x + (enemy.width*enemy.scale)/2];
     var yHitZone = [enemy.animation.y - (enemy.height*enemy.scale)/2, enemy.animation.y + (enemy.height*enemy.scale)/2];
-    // console.log(xHitZone, yHitZone, this.animation.x, this.animation.y, this.animation.x > xHitZone[0] && this.animation.x < xHitZone[1] && this.animation.y > yHitZone[0] && this.animation.y < yHitZone[1]);
 
     if (this.animation.x > xHitZone[0] && 
         this.animation.x < xHitZone[1] &&
@@ -127,8 +124,7 @@ Skookum.prototype = {
   },
 
   die: function() {
-    console.log("I died");
-    game.sounds.explosion.play();
+    game.playSound('explosion');
     this.dead = true;
   },
 
