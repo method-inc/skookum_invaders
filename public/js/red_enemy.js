@@ -57,7 +57,7 @@ RedEnemy.prototype.tick = function() {
     return;
   }
 
-  // this.animation.x += this.vX * this.direction * this.health;
+  this.animation.x += this.vX * this.direction * this.health;
   if (this.animation.x > game.canvas.width - this.movement_padding || this.animation.x < this.movement_padding) {
     this.direction *= -1;
     this.animation.y += this.vY;
