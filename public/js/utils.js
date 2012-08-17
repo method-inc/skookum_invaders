@@ -16,3 +16,13 @@ function findIndexById(array, id) {
   }
   return index;
 }
+
+
+function stringify(array) {
+  var str = "[";
+  for(var i = 0; i < array.length; i++) {
+    str += " "+array[i].id+", ";
+  }
+  str += "]";
+  return str;
+}

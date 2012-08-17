@@ -128,10 +128,10 @@ audio:not([controls]),
   box-sizing: border-box;
 }
 html {
-  background: #171113;
+  background: #000;
 }
 body {
-  background: #171113;
+  background: #000;
   width: 100%;
   height: 100%;
   color: #d0d0d0;
