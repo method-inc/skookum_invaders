@@ -22,7 +22,8 @@ function tick() {
   // clean up stragglers on stage
   _.each(game.stage.children, function(child) {
     
-    if (child.name == 'skookum' || child.name == 'starfield') return;
+    var static_items = ['skookum', 'starfield', 'scoreboard'];
+    if (static_items.indexOf(child.name) > -1) return;
 
     var found;
 
@@ -62,6 +63,7 @@ function tick() {
 
 (function() {
 
+  // initialize game
   window.game = new Game({
     fps: 60,
     startLevel: 1,
@@ -69,34 +71,21 @@ function tick() {
     rewardLevel: 1
   });
 
-  document.onkeydown = function (e) {
-    game.handleKeyDown(e);
-  };
-
-  document.onkeyup = function (e) {
-    game.handleKeyUp(e);
-  };
+  // initialize scoreboard
+  game.scoreboard = new Scoreboard();
 
   // initialize player, background, and first wave of enemies
   game.drawStars();
   game.skookum = new Skookum();
-  game.buildNewEnemyGroup(this.numEnemyGroups++);
+  game.buildNewEnemyGroup(game.numEnemyGroups++);
   game.sounds.launch.play();
 
-  // initialize scoreboard
-  game.scoreboard = new Scoreboard();
-
+  // listen for keypresses
+  document.onkeydown = function (e) { game.handleKeyDown(e); };
+  document.onkeyup = function (e) { game.handleKeyUp(e); };
+  
+  // start ticker  
   Ticker.setFPS(60);
   Ticker.addListener(tick);
 
 })();
-
-
-function stringify(array) {
-  var str = "[";
-  for(var i = 0; i < array.length; i++) {
-    str += " "+array[i].id+", ";
-  }
-  str += "]";
-  return str;
-}

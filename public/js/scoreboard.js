@@ -6,6 +6,7 @@ function Scoreboard() {
   this.scoreDisplay.text = 'SCORE:  0';
   this.scoreDisplay.x = 10;
   this.scoreDisplay.y = 25;
+  this.scoreDisplay.name = 'scoreboard';
   game.stage.addChild(this.scoreDisplay);
 
 }
