@@ -15,7 +15,6 @@ function Game(options) {
     rewardLevel: options.rewardLevel || 1
   };
 
-
   this.canvas = document.getElementById("game");
 
   this.canvas.width =  this.canvas.parentNode.clientWidth;
@@ -33,14 +32,6 @@ function Game(options) {
   this.numEnemyGroups = 2;
   this.paused = false;
 
-  this.items = new Container();
-  this.items.name = "gameItems";
-  this.stage.addChild(this.items);
-  
-  this.enemies = new Container();
-  this.enemies.name = "gameEnemies";
-  this.stage.addChild(this.enemies);
-
   this.sounds = {
     launch: new Audio("sounds/launch.wav"),
     shoot: new Audio("sounds/shoot2.wav"),
@@ -50,6 +41,38 @@ function Game(options) {
 }
 
 Game.prototype = {
+
+  initialize: function(options) {
+    // initialize background
+    this.drawStars();
+
+    // 
+    this.skookum = new Skookum();
+
+    this.items = new Container();
+    this.items.name = "gameItems";
+    this.stage.addChild(this.items);
+    
+    this.enemies = new Container();
+    this.enemies.name = "gameEnemies";
+    this.stage.addChild(this.enemies);
+
+    // initialize scoreboard
+    this.scoreboard = new Scoreboard();
+
+    // initialize first wave of enemies
+    this.buildNewEnemyGroup(this.numEnemyGroups++);
+    this.sounds.launch.play();
+
+    // listen for keypresses
+    document.onkeydown = function (e) { game.handleKeyDown(e); };
+    document.onkeyup = function (e) { game.handleKeyUp(e); };
+    
+    // start ticker  
+    Ticker.setFPS(60);
+    Ticker.addListener(tick);
+  }, 
+
   handleKeyDown: function(e) {
     //cross browser issues exist
     if (!e) { e = window.event; }

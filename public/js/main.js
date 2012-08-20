@@ -32,21 +32,7 @@ function tick() {
     rewardLevel: 1
   });
 
-  // initialize scoreboard
-  game.scoreboard = new Scoreboard();
-
-  // initialize player, background, and first wave of enemies
-  game.drawStars();
-  game.skookum = new Skookum();
-  game.buildNewEnemyGroup(game.numEnemyGroups++);
-  game.sounds.launch.play();
-
-  // listen for keypresses
-  document.onkeydown = function (e) { game.handleKeyDown(e); };
-  document.onkeyup = function (e) { game.handleKeyUp(e); };
-  
-  // start ticker  
-  Ticker.setFPS(60);
-  Ticker.addListener(tick);
+  // start game
+  game.initialize();
 
 })();

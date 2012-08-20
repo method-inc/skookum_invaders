@@ -64,7 +64,17 @@ RedEnemy.prototype.initialize = function(x,y) {
 };
 
 RedEnemy.prototype.move = function() {
-  // this.x += this.vX * this.direction * this.health;
+  
+  if (this.top() > game.canvas.height) {
+    game.skookum.takeDamage();
+  }
+
+  if (!game.skookum.invincable && this.intersects(game.skookum)) {
+    game.skookum.takeDamage();
+    this.takeDamage(); 
+  }
+
+  this.x += this.vX * this.direction * this.health;
   if (this.x > game.canvas.width - this.movement_padding || this.x < this.movement_padding) {
     this.direction *= -1;
     this.y += this.vY;

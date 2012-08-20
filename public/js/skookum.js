@@ -32,6 +32,7 @@ Skookum.prototype.initialize = function() {
   this.x_direction = 0;
   this.y_direction = 0;
   this.hitTimeout = 0;
+  this.invincable = false;
   this.timeoutLength = 120;
 
   this.onAnimationEnd = function() {
@@ -70,21 +71,14 @@ Skookum.prototype.onTick = function() {
   }
 
   var self = this;
-  if (this.hitTimeout === 0) {
-    _.each(game.items, function(e) {
-      if (e.enemy && self.checkHit(e)) {
-        e.takeDamage();
-        return self.takeDamage(e);
-      }
-    });  
-  }
-  else {
+  if (this.hitTimeout > 0) {
     this.hitTimeout++;
     this.alpha = Math.random();
   }
 
   if (this.hitTimeout >= this.timeoutLength) {
     this.hitTimeout = 0;
+    this.invincable = false;
     this.alpha = 1;
   }
   
@@ -100,7 +94,10 @@ Skookum.prototype.shoot = function() {
 };
 
 Skookum.prototype.takeDamage = function() {
+  if (this.invincable) return;
+
   this.hitTimeout = 1;
+  this.invincable = true;
 
   if (this.shield) {
     this.shield = false;
