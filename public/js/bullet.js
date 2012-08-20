@@ -1,56 +1,59 @@
 function Bullet(x, y) {
+  this.initialize(x, y);
+}
+
+Bullet.prototype = new Actor();
+
+Bullet.prototype.initialize = function(x, y) {
+
   this.id = randomString();
   this.name = 'bullet';
-  this.width = 50;
-  this.height = 100;
-  this.scale = 0.25;
-  this.vY = 15;
+  this.frameWidth = 50;
+  this.frameHeight = 100;
   this.dead = false;
 
-  this.sprites = new SpriteSheet({
+  var spriteSheet = new SpriteSheet({
     images:['img/'+this.name+'.png'],
-    frames: {width:this.width, height:this.height, count:2, regX:this.width/2, regY:this.height/2},
+    frames: {width:this.frameWidth, height:this.frameHeight, count:2, regX:this.frameWidth/2, regY:this.frameHeight/2},
     animations: {shoot:[0,1, "shoot", 8]}
   });
 
-  this.animation = new BitmapAnimation(this.sprites);
+  this.BitmapAnimation_initialize(spriteSheet);
 
-  this.animation.gotoAndPlay('shoot');
+  this.gotoAndPlay('shoot');
 
-  this.animation.name = this.name;
-  this.animation.x = x;
-  this.animation.y = y;
+  this.x = x;
+  this.y = y;
+  this.scale = 0.25;
+  this.width = parseInt((this.frameWidth * this.scale) * 0.35, 10);
+  this.height = parseInt((this.frameHeight * this.scale) * 0.8, 10);
+  this.vY = 4;
+  this.scaleX = this.scaleY = this.scale;
+  this.currentFrame = 0;
 
-  this.animation.scaleX = this.animation.scaleY = this.scale;
-  this.animation.currentFrame = 0;
-  game.stage.addChild(this.animation);
-
+  game.items.addChild(this);
   return this;
-}
-
-// inherit actor methods
-Bullet.prototype = new Actor();
+};
 
 // tick function
-Bullet.prototype.tick = function() {
-    
-  if (this.dead) {
-    return game.deadItems.push(this);
-  }
+Bullet.prototype.onTick = function() {
+  var self = this;  
 
-  this.animation.y -= this.vY;
+  if (this.dead) return game.items.removeChild(this);
 
-  if (this.animation.y < -this.height) {
-    this.die();
-  }
+  this.y -= this.vY;
+  this.vY *= 1.03;
 
+  // console.log(this.BoundingRectangle(), this.frame);
+
+  if (this.bottom() < -(this.height)) this.die();
   else {
-    for(var i = 0, num = game.items.length; i < num; i++) {
-      if (game.items[i].enemy && this.checkHit(game.items[i])) {
-        game.items[i].takeDamage();
-        this.die();
+    _.each(game.enemies.children, function(e) {
+      if (self.checkHit(e)) {
+        e.takeDamage();
+        self.die();
       }
-    }
+    });
   }
 
   return this;

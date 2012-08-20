@@ -33,8 +33,13 @@ function Game(options) {
   this.numEnemyGroups = 2;
   this.paused = false;
 
-  this.items = [];
-  this.deadItems = [];
+  this.items = new Container();
+  this.items.name = "gameItems";
+  this.stage.addChild(this.items);
+  
+  this.enemies = new Container();
+  this.enemies.name = "gameEnemies";
+  this.stage.addChild(this.enemies);
 
   this.sounds = {
     launch: new Audio("sounds/launch.wav"),
@@ -88,14 +93,12 @@ Game.prototype = {
   },
 
   spawnEnemy: function(x, y) {
-    this.items.push(new RedEnemy(x || 350, y || 150));
+    new RedEnemy(x || 350, y || 150);
   },
 
   buildNewEnemyGroup: function(num) {
     var self = this,
         spacing = 100;
-
-    // this.spawnEnemy();
 
     _.each(_.range(num || 2), function(n) {
      for(var i = 0; i < 8; i++) {

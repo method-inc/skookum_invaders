@@ -3,12 +3,14 @@ function Enemy() {}
 Enemy.prototype = new Actor();
 
 // tick method
-Enemy.prototype.tick = function() {
+Enemy.prototype.onTick = function() {
     
   if (this.dead) {
-    if (this.animation.currentFrame == this.deadFrame) game.deadItems.push(this);
+    if (this.currentFrame == this.deadFrame) game.enemies.removeChild(this);
     return;
   }
+
+  if (this.top() > game.canvas.height) this.die();
 
   this.move();
   
@@ -26,7 +28,7 @@ Enemy.prototype.takeDamage = function() {
     game.score += this.points.kill;
   }
   else {
-    this.animation.gotoAndPlay(this.health_animations[this.health]);
+    this.gotoAndPlay(this.health_animations[this.health]);
     game.score += this.points.hit;
   }
 };
@@ -34,6 +36,6 @@ Enemy.prototype.takeDamage = function() {
 // die method
 Enemy.prototype.die = function() {
   game.playSound('explosion');
-  this.animation.gotoAndPlay('dead');
+  this.gotoAndPlay('dead');
   this.dead = true;
 };

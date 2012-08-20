@@ -1,16 +1,17 @@
 function RedEnemy(x, y) {
+  this.initialize(x, y);
+}
+
+RedEnemy.prototype = new Enemy();
+
+RedEnemy.prototype.initialize = function(x,y) {
   var self = this;
 
   this.id = randomString();
   this.name = 'red_enemy';
   this.enemy = true;
-  this.width = 230;
-  this.height = 230;
-  this.scale = 0.25;
-  this.vY = 50;
-  this.vX = 2;
-  this.direction = 1;
-  this.movement_padding = 100;
+  this.frameWidth = 230;
+  this.frameHeight = 230;
   this.dead = false;
   this.points = {
     hit:10,
@@ -24,9 +25,9 @@ function RedEnemy(x, y) {
   };
   this.deadFrame = 9;
 
-  this.sprites = new SpriteSheet({
+  var spriteSheet = new SpriteSheet({
     images:['img/'+this.name+'.png'],
-    frames: {width:this.width, height:this.height, count:10, regX:this.width/2, regY:this.height/2},
+    frames: {width:this.frameWidth, height:this.frameHeight, count:10, regX:this.frameWidth/2, regY:this.frameHeight/2},
     animations: {
       idle:[0,1, "idle", 8], 
       damaged:[2,3, "damaged", 12], 
@@ -35,35 +36,38 @@ function RedEnemy(x, y) {
     }
   });
 
-  this.animation = new BitmapAnimation(this.sprites);
+  this.BitmapAnimation_initialize(spriteSheet);
 
-  this.animation.gotoAndPlay('idle');
+  this.gotoAndPlay('idle');
 
-  this.animation.name = this.name;
-  this.animation.x = x;
-  this.animation.y = y;
+  this.x = x;
+  this.y = y;
+  this.scale = 0.25;
+  this.width = parseInt((this.frameWidth * this.scale) * 0.75, 10);
+  this.height = parseInt((this.frameHeight * this.scale) * 0.75, 10);
+  this.vY = 50;
+  this.vX = 2;
+  this.scaleX = this.scaleY = this.scale;
+  this.direction = 1;
+  this.movement_padding = 100;
 
-  this.animation.onAnimationEnd = function(instance, anim) {
+  this.onAnimationEnd = function(instance, anim) {
     if (anim == "dead") {
       this.gotoAndStop(9);
     }
   };
-
-  this.animation.scaleX = this.animation.scaleY = this.scale;
-  this.animation.currentFrame = 0;
-  game.stage.addChild(this.animation);
+  
+  this.currentFrame = 0;
+  game.enemies.addChild(this);
 
   return this;
-}
-
-// inherit actor methods
-RedEnemy.prototype = new Enemy();
+};
 
 RedEnemy.prototype.move = function() {
-  this.animation.x += this.vX * this.direction * this.health;
-  if (this.animation.x > game.canvas.width - this.movement_padding || this.animation.x < this.movement_padding) {
+  // this.x += this.vX * this.direction * this.health;
+  if (this.x > game.canvas.width - this.movement_padding || this.x < this.movement_padding) {
     this.direction *= -1;
-    this.animation.y += this.vY;
+    this.y += this.vY;
   }
   return this;
 };

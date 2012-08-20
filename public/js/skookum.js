@@ -1,67 +1,72 @@
 function Skookum() {
+  this.initialize();
+}
+
+Skookum.prototype = new Actor();
+
+Skookum.prototype.initialize = function() {
+
   this.id = randomString();
   this.name = 'skookum';
-  this.width = 270;
-  this.height = 220;
-  this.scale = 0.3;
-  this.x = Math.floor(game.canvas.width / 2);
-  this.y = game.canvas.height - this.height * this.scale - 50;
-  this.vX = 10;
-  this.vY = 7;
-  this.x_direction = 0;
-  this.y_direction = 0;
   this.startupSequence = true;
   this.shield = true;
-  this.hitTimeout = 0;
-  this.timeoutLength = 120;
+  this.frameWidth = 270;
+  this.frameHeight = 220;
 
-  this.sprites = new SpriteSheet({
+  var spriteSheet = new SpriteSheet({
     images:['img/'+this.name+'.png'],
-    frames: {width:this.width, height:this.height, count:8, regX:this.width/2, regY:this.height/2},
+    frames: {width:this.frameWidth, height:this.frameHeight, count:8, regX:this.frameWidth/2, regY:this.frameHeight/2},
     animations: {
       shoot_without_shield:[0,3, "shoot_without_shield", 5],
       shoot_with_shield:[4,7, "shoot_with_shield", 5]
     }
   });
 
-  this.animation = new BitmapAnimation(this.sprites);
+  this.BitmapAnimation_initialize(spriteSheet);
 
-  this.animation.name = this.name;
-  this.animation.onAnimationEnd = function() {
+  this.scale = 0.3;
+  this.width = parseInt((this.frameWidth * this.scale) * 0.8, 10);
+  this.height = parseInt((this.frameHeight * this.scale) * 0.8, 10);
+  this.vX = 10;
+  this.vY = 7;
+  this.x_direction = 0;
+  this.y_direction = 0;
+  this.hitTimeout = 0;
+  this.timeoutLength = 120;
+
+  this.onAnimationEnd = function() {
     this.stop();
   };
-  this.animation.x = this.x;
-  this.animation.y = this.y;
 
-  this.animation.scaleX = this.animation.scaleY = 2;
+  this.x = Math.floor(game.canvas.width / 2);
+  this.y = game.canvas.height - this.frameHeight * this.scale - 50;
+  this.scaleX = this.scaleY = 2;
+  this.currentFrame = 4;
+  game.stage.addChild(this);
+};
 
-  this.animation.currentFrame = 4;
-  game.stage.addChild(this.animation);
-}
 
-Skookum.prototype = new Actor();
-
-Skookum.prototype.tick = function() {
+Skookum.prototype.onTick = function() {
 
   if (this.dead) {
     game.over = true;
-    return game.stage.removeChild(this.animation);
+    return game.stage.removeChild(this);
   }
 
   if (this.startupSequence) {
-    var newScale = this.animation.scaleX - 0.025;
-    this.animation.scaleX = this.animation.scaleY = newScale;
+    var newScale = this.scaleX - 0.025;
+    this.scaleX = this.scaleY = newScale;
     if (newScale <= this.scale) this.startupSequence = false;
     return this;
   }
 
   // move ship if key down
   if (this.x_direction !== 0 && this.testBoundsX()) {
-    this.animation.x += this.vX * this.x_direction;  
+    this.x += this.vX * this.x_direction;
   }
 
   if (this.y_direction !== 0 && this.testBoundsY()) {
-    this.animation.y += this.vY * this.y_direction;  
+    this.y += this.vY * this.y_direction;  
   }
 
   var self = this;
@@ -75,12 +80,12 @@ Skookum.prototype.tick = function() {
   }
   else {
     this.hitTimeout++;
-    this.animation.alpha = Math.random();
+    this.alpha = Math.random();
   }
 
   if (this.hitTimeout >= this.timeoutLength) {
     this.hitTimeout = 0;
-    this.animation.alpha = 1;
+    this.alpha = 1;
   }
   
 
@@ -88,9 +93,9 @@ Skookum.prototype.tick = function() {
 };
 
 Skookum.prototype.shoot = function() {
-  if (this.shield) this.animation.gotoAndPlay('shoot_with_shield');
-  else this.animation.gotoAndPlay('shoot_without_shield');
-  game.items.push(new Bullet(this.animation.x, this.animation.y));
+  if (this.shield) this.gotoAndPlay('shoot_with_shield');
+  else this.gotoAndPlay('shoot_without_shield');
+  new Bullet(this.x, this.y);
   game.playSound('shoot');
 };
 
@@ -99,7 +104,7 @@ Skookum.prototype.takeDamage = function() {
 
   if (this.shield) {
     this.shield = false;
-    this.animation.gotoAndStop(0);
+    this.gotoAndStop(0);
   }
   else {
     this.die();
@@ -112,20 +117,20 @@ Skookum.prototype.die = function() {
 };
 
 Skookum.prototype.testBoundsX = function() {
-  if (this.animation.x > game.canvas.width && this.x_direction === 1) {
+  if (this.x > game.canvas.width && this.x_direction === 1) {
     return false;
   }
-  else if (this.animation.x < 1 && this.x_direction === -1) {
+  else if (this.x < 1 && this.x_direction === -1) {
     return false;
   }
   return true;
 };
 
 Skookum.prototype.testBoundsY = function() {
-  if (this.animation.y + (this.height * this.animation.scaleX) > game.canvas.height && this.y_direction === 1) {
+  if (this.y + (this.frameHeight * this.scaleX) > game.canvas.height && this.y_direction === 1) {
     return false;
   }
-  else if (this.animation.y < game.canvas.height/2 && this.y_direction === -1) {
+  else if (this.y < game.canvas.height/2 && this.y_direction === -1) {
     return false;
   }
   return true;

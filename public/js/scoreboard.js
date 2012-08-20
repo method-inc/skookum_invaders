@@ -1,18 +1,19 @@
 function Scoreboard() {
-
-  this.scoreDisplay = new Text();
-  this.scoreDisplay.color = "#fff";
-  this.scoreDisplay.font = "bold 24px Arial";
-  this.scoreDisplay.text = 'SCORE:  0';
-  this.scoreDisplay.x = 10;
-  this.scoreDisplay.y = 25;
-  this.scoreDisplay.name = 'scoreboard';
-  game.stage.addChild(this.scoreDisplay);
-
+  this.initialize();
 }
 
-Scoreboard.prototype = {
-  tick: function() {
-    this.scoreDisplay.text = 'SCORE:  ' + game.score;
-  }
+Scoreboard.prototype = new Text();
+
+Scoreboard.prototype.initialize = function() {
+  this.color = "#fff";
+  this.font = "bold 24px Arial";
+  this.text = 'SCORE:  0';
+  this.x = 10;
+  this.y = 25;
+  this.name = 'scoreboard';
+  game.stage.addChild(this);
+};
+
+Scoreboard.prototype.onTick = function() {
+  this.text = 'SCORE:  ' + game.score;
 };
