@@ -24,7 +24,7 @@ Bullet.prototype.initialize = function(x, y) {
 
   this.x = x;
   this.y = y;
-  this.scale = 0.25;
+  this.scale = 0.2;
   this.width = parseInt((this.frameWidth * this.scale) * 0.35, 10);
   this.height = parseInt((this.frameHeight * this.scale) * 0.8, 10);
   this.vY = 4;

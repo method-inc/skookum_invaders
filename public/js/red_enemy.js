@@ -42,14 +42,14 @@ RedEnemy.prototype.initialize = function(x,y) {
 
   this.x = x;
   this.y = y;
-  this.scale = 0.25;
+  this.scale = 0.2;
   this.width = parseInt((this.frameWidth * this.scale) * 0.75, 10);
   this.height = parseInt((this.frameHeight * this.scale) * 0.75, 10);
   this.vY = 50;
   this.vX = 2;
   this.scaleX = this.scaleY = this.scale;
   this.direction = 1;
-  this.movement_padding = 100;
+  this.movement_padding = 20;
 
   this.onAnimationEnd = function(instance, anim) {
     if (anim == "dead") {

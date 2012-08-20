@@ -24,7 +24,7 @@ Skookum.prototype.initialize = function() {
 
   this.BitmapAnimation_initialize(spriteSheet);
 
-  this.scale = 0.3;
+  this.scale = 0.25;
   this.width = parseInt((this.frameWidth * this.scale) * 0.8, 10);
   this.height = parseInt((this.frameHeight * this.scale) * 0.8, 10);
   this.vX = 10;
@@ -114,17 +114,17 @@ Skookum.prototype.die = function() {
 };
 
 Skookum.prototype.testBoundsX = function() {
-  if (this.x > game.canvas.width && this.x_direction === 1) {
+  if (this.right() + 20 > game.canvas.width && this.x_direction === 1) {
     return false;
   }
-  else if (this.x < 1 && this.x_direction === -1) {
+  else if (this.left() - 20 < 1 && this.x_direction === -1) {
     return false;
   }
   return true;
 };
 
 Skookum.prototype.testBoundsY = function() {
-  if (this.y + (this.frameHeight * this.scaleX) > game.canvas.height && this.y_direction === 1) {
+  if (this.bottom() + 20 > game.canvas.height && this.y_direction === 1) {
     return false;
   }
   else if (this.y < game.canvas.height/2 && this.y_direction === -1) {

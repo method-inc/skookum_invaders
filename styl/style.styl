@@ -4,8 +4,8 @@ reset-html5()
 
 /* Variables */
 yellow = #ffeb01
-bgcolor = #000
-textcolor = #d0d0d0
+bgcolor = #fff
+textcolor = #555
 
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
@@ -21,11 +21,14 @@ body
   font 1em/1.3125em Helvetica, Arial, sans-serif
 
 #container
-  position absolute
-  top     5px
-  right   5px
-  bottom  5px
-  left    5px
+  margin 10px auto
+  text-align center
+
+canvas
+  background #000
+  margin 0 auto
+  border 2px solid #444
+  box-shadow 0 0 5px #000
 
 a:link, a:active, a:visited
   color yellow
@@ -40,12 +43,10 @@ h1, h2, h3, h4, h5, h6
   line-height 1.3125em
 
 h1, .h1
-  font-weight 900
-  font-size 4.25em
-  color #fff
-  margin 0.6666em 0
-  &:first-of-type
-    margin-top 0
+  font-weight bold
+  font-size 1.5em
+  color #900
+  margin 0.15em 0
 h2, .h2
   font-size 2.625em
   margin 1em 0

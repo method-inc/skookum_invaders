@@ -10,6 +10,7 @@ var KEYCODE_P     = 80;
 
 function Game(options) {
   this.config = {
+    fps: options.fps || 30,
     startLevel: options.startLevel || 1,
     rewardInterval: options.rewardInterval || 5000, 
     rewardLevel: options.rewardLevel || 1
@@ -17,8 +18,10 @@ function Game(options) {
 
   this.canvas = document.getElementById("game");
 
-  this.canvas.width =  this.canvas.parentNode.clientWidth;
-  this.canvas.height = this.canvas.parentNode.clientHeight;
+  // this.canvas.width =  this.canvas.parentNode.clientWidth;
+  this.canvas.width =  800;
+  // this.canvas.height = this.canvas.parentNode.clientHeight;
+  this.canvas.height = 600;
 
   this.ctx = this.canvas.getContext("2d");
   this.stage = new Stage(this.canvas);
@@ -69,30 +72,36 @@ Game.prototype = {
     document.onkeyup = function (e) { game.handleKeyUp(e); };
     
     // start ticker  
-    Ticker.setFPS(60);
+    Ticker.setFPS(this.config.fps);
     Ticker.addListener(tick);
-  }, 
+  },
 
   handleKeyDown: function(e) {
     //cross browser issues exist
     if (!e) { e = window.event; }
     switch (e.keyCode) {
       case KEYCODE_LEFT:
+          e.preventDefault();
           this.skookum.x_direction = -1;
           break;
       case KEYCODE_RIGHT:
+          e.preventDefault();
           this.skookum.x_direction = 1;
           break;
       case KEYCODE_UP:
+          e.preventDefault();
           this.skookum.y_direction = -1;
           break;
       case KEYCODE_DOWN:
+          e.preventDefault();
           this.skookum.y_direction = 1;
           break;
       case KEYCODE_SPACE:
+          e.preventDefault();
           this.skookum.shoot();
           break;
       case KEYCODE_P:
+          e.preventDefault();
           this.paused = !this.paused;
           break;
     }
@@ -121,13 +130,16 @@ Game.prototype = {
 
   buildNewEnemyGroup: function(num) {
     var self = this,
-        spacing = 100;
+        rows = num || 2,
+        cols = 10,
+        y_spacing = 60,
+        x_spacing = 71;
 
-    _.each(_.range(num || 2), function(n) {
-     for(var i = 0; i < 8; i++) {
-       self.spawnEnemy(100 * i + 150, (n*spacing)+spacing);
+    for(var r = 1; r <= rows; r++) {
+     for(var c = 1; c <= cols; c++) {
+       self.spawnEnemy(x_spacing * c, y_spacing * r + 50);
      }
-    });
+    }
   },
 
   drawGrid: function() {
