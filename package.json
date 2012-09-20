@@ -16,7 +16,7 @@
   },
   "analyze": false,
   "scripts": {
-    "start": "./node_modules/.bin/serve ./public --no-logs & ./node_modules/.bin/mason watch -j",
+    "start": "./node_modules/.bin/serve ./ --no-logs & ./node_modules/.bin/mason watch -j",
     "build": "./node_modules/.bin/mason build"
   }
 }

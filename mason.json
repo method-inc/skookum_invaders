@@ -2,17 +2,17 @@
 
   "style.css": {
     "type": "stylus",
-    "sourceRoot": ".",
-    "sourcePaths": ["/styl/style.styl"],
-    "destRoot": "public",
+    "sourceRoot": "./assets/styl",
+    "sourcePaths": ["style.styl"],
+    "destRoot": "",
     "destPath": "styl/compiled/style.css"
   },
 
   "index.html": {
     "type": "jade",
-    "sourceRoot": "./jade/",
+    "sourceRoot": "./assets/jade",
     "sourcePaths": ["index.jade"],
     "destRoot": "",
-    "destPath": "public/index.html"
+    "destPath": "index.html"
   }
 }
