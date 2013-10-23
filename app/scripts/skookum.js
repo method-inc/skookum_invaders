@@ -13,8 +13,8 @@ Skookum.prototype.initialize = function() {
   this.frameWidth = 270;
   this.frameHeight = 220;
 
-  var spriteSheet = new SpriteSheet({
-    images:['img/'+this.name+'.png'],
+  var spriteSheet = new createjs.SpriteSheet({
+    images:['images/'+this.name+'.png'],
     frames: {width:this.frameWidth, height:this.frameHeight, count:8, regX:this.frameWidth/2, regY:this.frameHeight/2},
     animations: {
       shoot_without_shield:[0,3, "shoot_without_shield", 5],
@@ -67,7 +67,7 @@ Skookum.prototype.onTick = function() {
   }
 
   if (this.y_direction !== 0 && this.testBoundsY()) {
-    this.y += this.vY * this.y_direction;  
+    this.y += this.vY * this.y_direction;
   }
 
   var self = this;
@@ -81,7 +81,7 @@ Skookum.prototype.onTick = function() {
     this.invincable = false;
     this.alpha = 1;
   }
-  
+
 
   return this;
 };

@@ -1,6 +1,26 @@
-extends layout
+!!!5
+html
+  head
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title Skookum Invaders!!
+    meta(name='viewport', content='width=device-width')
+    link(rel='stylesheet', href='styles/main.css')
+  body
+    #container
+      h1 Skookum Invaders!
+      canvas#game(width="800", height="800") You don't have the ability to view canvas. Loser!!
+      p Controls: Arrow keys = movement, spacebar = shoot, P = pause game
 
-block content
-  h1 Skookum Invaders!
-  canvas#game(width="800", height="800") You don't have the ability to view canvas. Loser!!
-  p Controls: Arrow keys = movement, spacebar = shoot, P = pause game
+    //- All Javascript
+    script(src='scripts/libs.js')
+
+    script(src='scripts/XNARectangle.js')
+    script(src='scripts/utils.js')
+    script(src='scripts/actor.js')
+    script(src='scripts/enemy.js')
+    script(src='scripts/scoreboard.js')
+    script(src='scripts/skookum.js')
+    script(src='scripts/bullet.js')
+    script(src='scripts/red_enemy.js')
+    script(src='scripts/game.js')
+    script(src='scripts/main.js')

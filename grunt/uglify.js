@@ -6,8 +6,8 @@ module.exports = {
   },
   build: {
     files: [{
-      src: "public/scripts/*.js",
-      dest: "public/scripts/compiled/app.js"
+      src: "app/scripts/*.js",
+      dest: "dist/scripts/app.js"
     }]
   }
 };

@@ -1,6 +1,6 @@
 {
   "author": "Jim Snodgrass <jim@skookum.com>",
-  "name": "Skookum Invadors",
+  "name": "Skookum_Invadors",
   "description": "PPS API Public Documentation Site",
   "version": "0.0.2",
   "homepage": "http://skookum.github.io/skookum_invadors",
@@ -19,6 +19,8 @@
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-connect": "latest",
     "grunt-contrib-stylus": "latest",
-    "grunt-contrib-jade": "latest"
+    "grunt-contrib-jade": "latest",
+    "grunt-contrib-watch": "latest",
+    "matchdep": "~0.1.1"
   }
 }

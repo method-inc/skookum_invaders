@@ -1,12 +1,17 @@
+var componentFiles = ["app/scripts/components/lodash/dist/lodash.min.js",
+                      "app/scripts/components/easeljs/lib/easeljs-0.7.0.min.js"];
+
 module.exports = {
-  components: {
+  dist: {
     files: [{
-      src: [
-        "public/scripts/components/jquery/jquery.min.js",
-        "public/scripts/components/lodash/dist/lodash.min.js",
-        "public/scripts/components/angular-unstable/angular.min.js"
-      ],
-      dest: "public/scripts/compiled/components.js"
+      src: componentFiles,
+      dest: "dist/scripts/libs.js"
+    }]
+  },
+  local: {
+    files: [{
+      src: componentFiles,
+      dest: ".tmp/scripts/libs.js"
     }]
   }
 };

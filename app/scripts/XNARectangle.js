@@ -3,14 +3,14 @@
 //
 // Using EaselJS.Rectangle() as the based prototype to build XNARectangle to mimic the Rectangle class of XNA
 // Copyright (C) Microsoft Corporation. All rights reserved.
-// Ported to HTML5 Canvas with EaselJS by David Rousset - http://blogs.msdn.com/davrous 
+// Ported to HTML5 Canvas with EaselJS by David Rousset - http://blogs.msdn.com/davrous
 //-----------------------------------------------------------------------------
 (function (window) {
     //
     function XNARectangle(x, y, width, height) {
         this.initialize(x, y, width, height);
     }
-    XNARectangle.prototype = new Rectangle();
+    XNARectangle.prototype = new createjs.Rectangle();
 
     // constructor:
     XNARectangle.prototype.Rectangle_initialize = XNARectangle.prototype.initialize;
@@ -60,7 +60,7 @@
         else
             return false;
     };
-    
+
 
     /// <summary>
     /// Gets the position of the center of the bottom edge of the rectangle.
@@ -81,7 +81,7 @@
     /// </returns>
     XNARectangle.prototype.GetIntersectionDepth = function (rectB) {
         var rectA = this;
-        
+
         // Calculate half sizes.
         var halfWidthA = rectA.width / 2.0;
         var halfHeightA = rectA.height / 2.0;

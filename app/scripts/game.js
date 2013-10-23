@@ -12,7 +12,7 @@ function Game(options) {
   this.config = {
     fps: options.fps || 30,
     startLevel: options.startLevel || 1,
-    rewardInterval: options.rewardInterval || 5000, 
+    rewardInterval: options.rewardInterval || 5000,
     rewardLevel: options.rewardLevel || 1
   };
 
@@ -24,7 +24,7 @@ function Game(options) {
   this.canvas.height = 600;
 
   this.ctx = this.canvas.getContext("2d");
-  this.stage = new Stage(this.canvas);
+  this.stage = new createjs.Stage(this.canvas);
 
   this.over = false;
 
@@ -49,14 +49,14 @@ Game.prototype = {
     // initialize background
     this.drawStars();
 
-    // 
+    //
     this.skookum = new Skookum();
 
-    this.items = new Container();
+    this.items = new createjs.Container();
     this.items.name = "gameItems";
     this.stage.addChild(this.items);
-    
-    this.enemies = new Container();
+
+    this.enemies = new createjs.Container();
     this.enemies.name = "gameEnemies";
     this.stage.addChild(this.enemies);
 
@@ -70,10 +70,10 @@ Game.prototype = {
     // listen for keypresses
     document.onkeydown = function (e) { game.handleKeyDown(e); };
     document.onkeyup = function (e) { game.handleKeyUp(e); };
-    
-    // start ticker  
-    Ticker.setFPS(this.config.fps);
-    Ticker.addListener(tick);
+
+    // start ticker
+    createjs.Ticker.setFPS(this.config.fps);
+    createjs.Ticker.addEventListener("tick", tick);
   },
 
   handleKeyDown: function(e) {
@@ -143,7 +143,7 @@ Game.prototype = {
   },
 
   drawGrid: function() {
-    
+
     this.ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
 
     // draw horizontal rows
@@ -164,15 +164,15 @@ Game.prototype = {
   },
 
   drawStars: function() {
-    this.starField = new Container();
+    this.starField = new createjs.Container();
     this.starField.name = 'starfield';
     for(var i = 0; i < 300; i++) {
       var x = Math.random()*this.canvas.width,
           y = Math.random()*this.canvas.height,
           r = Math.random()*2;
-      
-      var star = new Shape();
-      star.graphics.beginFill(Graphics.getRGB(255,255,255));
+
+      var star = new createjs.Shape();
+      star.graphics.beginFill(createjs.Graphics.getRGB(255,255,255));
       star.graphics.drawCircle(0,0,r);
       star.x = x;
       star.y = y;

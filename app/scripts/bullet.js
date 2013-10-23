@@ -12,8 +12,8 @@ Bullet.prototype.initialize = function(x, y) {
   this.frameHeight = 100;
   this.dead = false;
 
-  var spriteSheet = new SpriteSheet({
-    images:['img/'+this.name+'.png'],
+  var spriteSheet = new createjs.SpriteSheet({
+    images:['images/'+this.name+'.png'],
     frames: {width:this.frameWidth, height:this.frameHeight, count:2, regX:this.frameWidth/2, regY:this.frameHeight/2},
     animations: {shoot:[0,1, "shoot", 8]}
   });
@@ -37,7 +37,7 @@ Bullet.prototype.initialize = function(x, y) {
 
 // tick function
 Bullet.prototype.onTick = function() {
-  var self = this;  
+  var self = this;
 
   if (this.dead) return game.items.removeChild(this);
 

@@ -25,12 +25,12 @@ RedEnemy.prototype.initialize = function(x,y) {
   };
   this.deadFrame = 9;
 
-  var spriteSheet = new SpriteSheet({
-    images:['img/'+this.name+'.png'],
+  var spriteSheet = new createjs.SpriteSheet({
+    images:['images/'+this.name+'.png'],
     frames: {width:this.frameWidth, height:this.frameHeight, count:10, regX:this.frameWidth/2, regY:this.frameHeight/2},
     animations: {
-      idle:[0,1, "idle", 8], 
-      damaged:[2,3, "damaged", 12], 
+      idle:[0,1, "idle", 8],
+      damaged:[2,3, "damaged", 12],
       dying:[4,5, "dying", 25],
       dead:[6,9, "dead", 8]
     }
@@ -56,7 +56,7 @@ RedEnemy.prototype.initialize = function(x,y) {
       this.gotoAndStop(9);
     }
   };
-  
+
   this.currentFrame = 0;
   game.enemies.addChild(this);
 
@@ -64,14 +64,14 @@ RedEnemy.prototype.initialize = function(x,y) {
 };
 
 RedEnemy.prototype.move = function() {
-  
+
   if (this.top() > game.canvas.height) {
     game.skookum.takeDamage();
   }
 
   if (!game.skookum.invincable && this.intersects(game.skookum)) {
     game.skookum.takeDamage();
-    this.takeDamage(); 
+    this.takeDamage();
   }
 
   this.x += this.vX * this.direction * this.health;

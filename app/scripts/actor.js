@@ -2,7 +2,7 @@ function Actor() {
   this.initialize();
 }
 
-Actor.prototype = new BitmapAnimation();
+Actor.prototype = new createjs.Sprite();
 
 // constructor:
 Actor.prototype.BitmapAnimation_initialize = Actor.prototype.initialize;
@@ -34,6 +34,6 @@ Actor.prototype.intersects = function (targetRectangle) {
   if (targetRectangle.left() < this.right() && this.left() < targetRectangle.right() && targetRectangle.top() < this.bottom()) {
     return this.top() < targetRectangle.bottom();
   }
-    
+
   return false;
 };
