@@ -17,7 +17,14 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', []);
-  grunt.registerTask('build', ['concat:components', 'uglify']);
+  grunt.registerTask('build', [ 'clean:dist',
+                                'copy:dist',
+                                'copy:scripts',
+                                'concat:dist',
+                                'jade:dist',
+                                'stylus:dist',
+                                'uglify']);
+
   grunt.registerTask('server', ['clean:local',
                                 'copy:local',
                                 'copy:scripts',
