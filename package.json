@@ -1,22 +1,24 @@
 {
-  "author": "Skookum Digital Works",
-  "name": "pps-api-docs-site",
+  "author": "Jim Snodgrass <jim@skookum.com>",
+  "name": "Skookum Invadors",
   "description": "PPS API Public Documentation Site",
-  "version": "0.0.1",
-  "homepage": "https://github.com/Skookum/pps-api-docs-site/",
+  "version": "0.0.2",
+  "homepage": "http://skookum.github.io/skookum_invadors",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Skookum/pps-api-docs-site.git"
+    "url": "git@github.com:Skookum/skookum_invadors.git"
   },
   "engines": {},
   "dependencies": {},
   "devDependencies": {
-    "mason": "0.0.13",
-    "serve": "latest"
-  },
-  "analyze": false,
-  "scripts": {
-    "start": "./node_modules/.bin/serve ./ --no-logs & ./node_modules/.bin/mason watch -j",
-    "build": "./node_modules/.bin/mason build"
+    "grunt": "latest",
+    "bower": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-connect": "latest",
+    "grunt-contrib-stylus": "latest",
+    "grunt-contrib-jade": "latest"
   }
 }
