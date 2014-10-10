@@ -1,12 +1,13 @@
 {
   "author": "Jim Snodgrass <jim@skookum.com>",
-  "name": "Skookum_Invadors",
-  "description": "PPS API Public Documentation Site",
+  "name": "Skookum_Invaders",
+  "description": "Space Invaders a la Skookum built with Easel..",
   "version": "0.0.2",
-  "homepage": "http://skookum.github.io/skookum_invadors",
+  "homepage": "http://skookum.github.io/skookum_invaders",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Skookum/skookum_invadors.git"
+    "url": "git@github.com:Skookum/skookum_invaders.git"
   },
   "engines": {},
   "dependencies": {},
